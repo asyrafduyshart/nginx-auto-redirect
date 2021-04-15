@@ -10,10 +10,6 @@ server {
         access_log  off;
         error_log off;
 
-        location = "/.well-known/pki-validation/${VERIFICATION_FILE_NAME}" {
-                alias /usr/share/nginx/html/${VERIFICATION_FILE_NAME};
-        }
-
         location / {
                 error_page 418 = @other;
                 recursive_error_pages on;
@@ -63,10 +59,14 @@ server {
         }
 
         location @other {
-        #       mobile configuration
+                #mobile configuration
                 proxy_pass http://${MOBILE_URL};
                 rewrite ^/${MOBILE_URL}(.*)$ $1
                 break;
+        }
+
+        location = "/.well-known/pki-validation/${VERIFICATION_FILE_NAME}" {
+                alias /usr/share/nginx/html/${VERIFICATION_FILE_NAME};
         }
 
 }
