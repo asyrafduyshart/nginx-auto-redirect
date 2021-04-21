@@ -1,6 +1,6 @@
 server {
-        listen 443 default_server;
-        listen [::]:443 default_server;
+        listen 443 proxy_protocol ;
+        listen [::]:443 proxy_protocol;
         ssl on;
         ssl_certificate /etc/nginx/certs/cert.pem;
         ssl_certificate_key /etc/nginx/certs/key.pem;
@@ -16,8 +16,6 @@ server {
 
                 #set $mobile_rewrite variable
                 set $mobile_rewrite do_not_perform;
-
-                
 
                 if ($http_user_agent ~* "(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino") {
                     set $mobile_rewrite perform;
@@ -76,7 +74,7 @@ server {
 
 
 server {
-    listen 80 default_server;
+    listen 80 proxy_protocol;
 
     server_name _;
 
