@@ -52,6 +52,10 @@ server {
                     return 418;
                 }
 
+                proxy_set_header Host            $host;
+                proxy_set_header X-Real-IP       $proxy_protocol_addr;
+                proxy_set_header X-Forwarded-For $proxy_protocol_addr;
+
                 #the real proxy pass
                 proxy_pass http://${DESKTOP_URL};
                 rewrite ^/${DESKTOP_URL}(.*)$ $1
@@ -60,6 +64,10 @@ server {
 
         location @other {
                 #mobile configuration
+
+                proxy_set_header Host            $host;
+                proxy_set_header X-Real-IP       $proxy_protocol_addr;
+                proxy_set_header X-Forwarded-For $proxy_protocol_addr;
 
                 proxy_pass http://${MOBILE_URL};
                 rewrite ^/${MOBILE_URL}(.*)$ $1
