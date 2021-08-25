@@ -1,4 +1,12 @@
 server {
+    listen       80;
+    server_name  _;
+    location / {
+        return 444;
+    }
+}
+
+server {
         listen 443 proxy_protocol ;
         listen [::]:443 proxy_protocol;
         ssl on;
@@ -83,7 +91,6 @@ server {
         location = "/.well-known/pki-validation/${VERIFICATION_FILE_NAME}" {
                 alias /usr/share/nginx/html/${VERIFICATION_FILE_NAME};
         }
-
 }
 
 
