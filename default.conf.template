@@ -85,7 +85,7 @@ server {
     listen 80 proxy_protocol;
     listen [::]:80 proxy_protocol;
 
-    server_name _;
+    server_name ${SERVER_NAMES};
 
     location / {
         error_page 418 = @other;

@@ -9,6 +9,6 @@ then
   -days 3650 -nodes -sha256
 fi
 
-envsubst '${VERIFICATION_FILE_NAME} ${MOBILE_URL} ${DESKTOP_URL}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
+envsubst '${VERIFICATION_FILE_NAME} ${MOBILE_URL} ${DESKTOP_URL} ${SERVER_NAMES}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
 
 exec "$@"
