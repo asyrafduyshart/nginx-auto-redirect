@@ -15,8 +15,8 @@ server {
 
         server_name _;
         
-        access_log /var/log/nginx/access.log;
-        error_log /var/log/nginx/error.log;
+        access_log off;
+        error_log off;
 
         location / {
                 error_page 418 = @other;
