@@ -52,9 +52,12 @@ server {
                     return 418;
                 }
 
+                http2_push_preload               on;
                 proxy_set_header Host            $host;
                 proxy_set_header X-Real-IP       $proxy_protocol_addr;
                 proxy_set_header X-Forwarded-For $proxy_protocol_addr;
+                proxy_set_header                 Upgrade $http_upgrade;
+                proxy_set_header                 Connection "upgrade";
 
                 #the real proxy pass
                 proxy_pass http://${DESKTOP_URL};
@@ -65,9 +68,12 @@ server {
         location @other {
                 #mobile configuration
 
+                http2_push_preload               on;
                 proxy_set_header Host            $host;
                 proxy_set_header X-Real-IP       $proxy_protocol_addr;
                 proxy_set_header X-Forwarded-For $proxy_protocol_addr;
+                proxy_set_header                 Upgrade $http_upgrade;
+                proxy_set_header                 Connection "upgrade";
 
                 proxy_pass http://${MOBILE_URL};
                 rewrite ^/${MOBILE_URL}(.*)$ $1
@@ -129,9 +135,12 @@ server {
             return 418;
         }
 
+        http2_push_preload               on;
         proxy_set_header Host            $host;
         proxy_set_header X-Real-IP       $proxy_protocol_addr;
         proxy_set_header X-Forwarded-For $proxy_protocol_addr;
+        proxy_set_header                 Upgrade $http_upgrade;
+        proxy_set_header                 Connection "upgrade";
 
         #the real proxy pass
         proxy_pass http://${DESKTOP_URL};
@@ -141,10 +150,12 @@ server {
 
     location @other {
             #mobile configuration
-
+            http2_push_preload               on;
             proxy_set_header Host            $host;
             proxy_set_header X-Real-IP       $proxy_protocol_addr;
             proxy_set_header X-Forwarded-For $proxy_protocol_addr;
+            proxy_set_header                 Upgrade $http_upgrade;
+            proxy_set_header                 Connection "upgrade";
 
             proxy_pass http://${MOBILE_URL};
             rewrite ^/${MOBILE_URL}(.*)$ $1
