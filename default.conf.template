@@ -107,8 +107,6 @@ server {
 
     server_name ${SERVER_NAMES};
 
-    limit_req zone=ip burst=12 delay=8;
-
     location / {
         error_page 418 = @other;
         recursive_error_pages on;
