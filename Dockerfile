@@ -1,4 +1,4 @@
-FROM nginx:stable
+FROM nginx:latest
 
 # Install OpenSSL so we can generate SSL certs if needed
 RUN apt-get update; apt-get install -y openssl
