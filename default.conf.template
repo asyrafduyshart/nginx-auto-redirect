@@ -1,5 +1,3 @@
-limit_req_zone $binary_remote_addr zone=ip:10m rate=10r/s;
-
 upstream desktop.host {
   server ${DESKTOP_URL};
 }
@@ -17,26 +15,12 @@ server {
 
         server_name _;
         
+        access_by_lua_file anti_ddos_challenge.lua;
+
         access_log off;
         error_log off;
 
-        # reset timed out connections freeing ram
-        reset_timedout_connection on;
-        # maximum time between packets the client can pause when sending nginx any data
-        client_body_timeout 10s;
-        # maximum time the client has to send the entire header to nginx
-        client_header_timeout 10s;
-        # timeout which a single keep-alive client connection will stay open
-        keepalive_timeout 65s;
-        # maximum time between packets nginx is allowed to pause when sending the client data
-        send_timeout 10s;
-
-        # number of requests per connection, does not affect SPDY
-        keepalive_requests 100;
-
         location / {
-                limit_req zone=ip burst=20 delay=8;
-
                 error_page 418 = @other;
                 recursive_error_pages on;
 
@@ -111,30 +95,16 @@ server {
         }
 }
 
-
 server {
     listen 80 proxy_protocol;
     listen [::]:80 proxy_protocol;
 
+    #nginx config settings etc
+    access_by_lua_file anti_ddos_challenge.lua;
+
     server_name _;
 
-    # reset timed out connections freeing ram
-    reset_timedout_connection on;
-    # maximum time between packets the client can pause when sending nginx any data
-    client_body_timeout 10s;
-    # maximum time the client has to send the entire header to nginx
-    client_header_timeout 10s;
-    # timeout which a single keep-alive client connection will stay open
-    keepalive_timeout 65s;
-    # maximum time between packets nginx is allowed to pause when sending the client data
-    send_timeout 10s;
-
-    # number of requests per connection, does not affect SPDY
-    keepalive_requests 100;
-
     location / {
-        limit_req zone=ip burst=20 delay=8;
-
         error_page 418 = @other;
         recursive_error_pages on;
 
