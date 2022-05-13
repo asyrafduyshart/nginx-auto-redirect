@@ -2,7 +2,7 @@ version: 2.1
 executors:
   docker-publisher:
     environment:
-      IMAGE_NAME: asyrafduyshart/nginx-auto-redirect
+      IMAGE_NAME: asyrafduyshart/nginx-ddos-redirect
     docker:
       - image: circleci/buildpack-deps:stretch
 jobs:
