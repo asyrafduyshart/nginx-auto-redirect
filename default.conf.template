@@ -1,15 +1,12 @@
-limit_req_zone $binary_remote_addr zone=ip:10m rate=20r/s;
-
-server {
-    listen 80;
-
-    server_name  _;
-    location / {
-        return 444;
-    }
+upstream desktop.host {
+  server ${DESKTOP_URL};
 }
 
-server {        
+upstream mobile.host {
+  server ${MOBILE_URL};
+}
+
+server {
         listen 443 ssl http2 proxy_protocol;
         listen [::]:443 ssl http2 proxy_protocol;
         ssl on;
@@ -22,7 +19,6 @@ server {
         error_log off;
 
         location / {
-                limit_req zone=ip burst=12 delay=8;
                 error_page 418 = @other;
                 recursive_error_pages on;
 
@@ -72,8 +68,8 @@ server {
                 proxy_set_header                 Connection "upgrade";
 
                 #the real proxy pass
-                proxy_pass http://${DESKTOP_URL};
-                rewrite ^/${DESKTOP_URL}(.*)$ $1
+                proxy_pass http://desktop.host;
+                rewrite ^/desktop.host(.*)$ $1
                 break;
         }
 
@@ -87,8 +83,8 @@ server {
                 proxy_set_header                 Upgrade $http_upgrade;
                 proxy_set_header                 Connection "upgrade";
 
-                proxy_pass http://${MOBILE_URL};
-                rewrite ^/${MOBILE_URL}(.*)$ $1
+                proxy_pass http://mobile.host;
+                rewrite ^/mobile.host(.*)$ $1
                 break;
         }
 
@@ -97,6 +93,7 @@ server {
         }
 }
 
+
 server {
     listen 80 proxy_protocol;
     listen [::]:80 proxy_protocol;
@@ -104,8 +101,6 @@ server {
     server_name _;
 
     location / {
-        limit_req zone=ip burst=12 delay=8;
-
         error_page 418 = @other;
         recursive_error_pages on;
 
@@ -155,8 +150,8 @@ server {
         proxy_set_header                 Connection "upgrade";
 
         #the real proxy pass
-        proxy_pass http://${DESKTOP_URL};
-        rewrite ^/${DESKTOP_URL}(.*)$ $1
+        proxy_pass http://desktop.host;
+        rewrite ^/desktop.host(.*)$ $1
         break;
     }
 
@@ -169,8 +164,8 @@ server {
             proxy_set_header                 Upgrade $http_upgrade;
             proxy_set_header                 Connection "upgrade";
 
-            proxy_pass http://${MOBILE_URL};
-            rewrite ^/${MOBILE_URL}(.*)$ $1
+            proxy_pass http://mobile.host;
+            rewrite ^/mobile.host(.*)$ $1
             break;
     }
 }
