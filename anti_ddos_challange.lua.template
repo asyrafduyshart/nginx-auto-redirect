@@ -273,7 +273,7 @@ This way you don't have to remove access_by_lua_file anti_ddos_challenge.lua; to
 2 = disabled (Won't show anywhere)
 3 = custom (Will enable script on sites / URL paths and disable it on those specified)
 ]]
-local master_switch = ${ANTI_DDOS} --enabled by default
+local master_switch = 3 --enabled by default
 
 --[[
 This feature is if you set "master_switch = 3" what this does is if you host multiple websites / services of one server / machine you can have this script disabled for all those websites / domain names other than those you specifiy.
@@ -285,8 +285,12 @@ You can also specify full domain names like "github.com" to protect specific dom
 ]]
 local master_switch_custom_hosts = {
 	{
+		2, --run auth checks
+		"/manifest", --authenticate Tor websites
+	},
+	{
 		1, --run auth checks
-		"localhost/ddos.*", --authenticate Tor websites
+		"*", --authenticate Tor websites
 	},
 	{
 		1, --run auth checks
