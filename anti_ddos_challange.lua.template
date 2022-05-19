@@ -2243,7 +2243,7 @@ local function WAF_Post_Requests()
 						arguement2 = 1
 					end
 					if arguement1 and arguement2 then --if what would of been our empty vars have been changed to not empty meaning a WAF match then block the request
-						ngx.log(ngx.DEBUG, 'Error POST Challenge')
+						ngx.log(ngx.STDERR, '\nError POST Challenge\n')
 						local output = ngx.exit(ngx.HTTP_FORBIDDEN) --deny user access
 						return output
 					end
@@ -2284,7 +2284,7 @@ local function WAF_Header_Requests()
 						arguement2 = 1
 					end
 					if arguement1 and arguement2 then --if what would of been our empty vars have been changed to not empty meaning a WAF match then block the request
-						ngx.log(ngx.DEBUG, 'Error WAF Challenge')
+						ngx.log(ngx.STDERR, '\nError WAF Challenge\n')
 						local output = ngx.exit(ngx.HTTP_FORBIDDEN) --deny user access
 						return output
 					end
@@ -2325,7 +2325,7 @@ local function WAF_query_string_Request()
 						arguement2 = 1
 					end
 					if arguement1 and arguement2 then --if what would of been our empty vars have been changed to not empty meaning a WAF match then block the request
-						ngx.log(ngx.DEBUG, 'Error WAF String Challenge')
+						ngx.log(ngx.STDERR, '\nError WAF String Challenge\n')
 						local output = ngx.exit(ngx.HTTP_FORBIDDEN) --deny user access
 						return output
 					end
@@ -2946,7 +2946,7 @@ end
 Grant access function to either grant or deny user access to our website
 ]]
 local function grant_access()
-	ngx.log(ngx.INFO, '===============SET Challenge=================')
+	ngx.log(ngx.STDERR, '\n===============SET Challenge=================\n')
 	--our uid cookie
 	local cookie_name = "cookie_" .. challenge
 	local cookie_value = ngx.var[cookie_name] or ""
@@ -3291,7 +3291,7 @@ local anti_ddos_html_output = [[
 --All previous checks failed and no access_granted permited so display authentication check page.
 --Output Anti-DDoS Authentication Page
 if set_cookies == nil then
-ngx.log(ngx.DEBUG, 'SET Challenge')
+ngx.log(ngx.STDERR, '\nSET Challenge\n')
 set_cookies = challenge.."="..answer.."; path=/; expires=" .. ngx.cookie_time(currenttime+expire_time) .. "; Max-Age=" .. expire_time .. ";" --apply our uid cookie in header here incase browsers javascript can't set cookies due to permissions.
 end
 ngx.header["Set-Cookie"] = set_cookies
