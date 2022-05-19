@@ -596,10 +596,10 @@ local WAF_query_string_Request_table = {
 		"[a-zA-Z0-9_]", --regex match name
 		"http%:%/%/", --regex or exact match value
 	},
-	-- {
-	-- 	"[a-zA-Z0-9_]", --regex match name
-	-- 	"https%:%/%/", --regex or exact match value
-	-- },
+	{
+		"[a-zA-Z0-9_]", --regex match name
+		"https%:%/%/", --regex or exact match value
+	},
 	--[[
 		SQLi SQL Injections
 	]]
@@ -2243,7 +2243,6 @@ local function WAF_Post_Requests()
 						arguement2 = 1
 					end
 					if arguement1 and arguement2 then --if what would of been our empty vars have been changed to not empty meaning a WAF match then block the request
-						ngx.log(ngx.STDERR, 'Error POST Challenge')
 						local output = ngx.exit(ngx.HTTP_FORBIDDEN) --deny user access
 						return output
 					end
@@ -2252,7 +2251,7 @@ local function WAF_Post_Requests()
 		end
 	end
 end
--- WAF_Post_Requests()
+WAF_Post_Requests()
 --[[End WAF Web Application Firewall POST Request arguments filter]]
 
 --[[WAF Web Application Firewall Header Request arguments filter]]
@@ -2284,7 +2283,6 @@ local function WAF_Header_Requests()
 						arguement2 = 1
 					end
 					if arguement1 and arguement2 then --if what would of been our empty vars have been changed to not empty meaning a WAF match then block the request
-						ngx.log(ngx.STDERR, 'Error WAF Challenge')
 						local output = ngx.exit(ngx.HTTP_FORBIDDEN) --deny user access
 						return output
 					end
@@ -2293,7 +2291,7 @@ local function WAF_Header_Requests()
 		end
 	end
 end
--- WAF_Header_Requests()
+WAF_Header_Requests()
 --[[End WAF Web Application Firewall Header Request arguments filter]]
 
 --[[WAF Web Application Firewall Query String Request arguments filter]]
@@ -2325,7 +2323,6 @@ local function WAF_query_string_Request()
 						arguement2 = 1
 					end
 					if arguement1 and arguement2 then --if what would of been our empty vars have been changed to not empty meaning a WAF match then block the request
-						ngx.log(ngx.STDERR, 'Error WAF String Challenge')
 						local output = ngx.exit(ngx.HTTP_FORBIDDEN) --deny user access
 						return output
 					end
@@ -2334,7 +2331,7 @@ local function WAF_query_string_Request()
 		end
 	end
 end
--- WAF_query_string_Request()
+WAF_query_string_Request()
 --[[End WAF Web Application Firewall Query String Request arguments filter]]
 
 --[[WAF Web Application Firewall URI Request arguments filter]]
@@ -2363,7 +2360,7 @@ local function WAF_URI_Request()
 		end
 	end
 end
--- WAF_URI_Request()
+WAF_URI_Request()
 --[[End WAF Web Application Firewall URI Request arguments filter]]
 
 --function to check if ip address is whitelisted to bypass our auth
@@ -2382,7 +2379,7 @@ local function check_ip_whitelist(ip_table)
 
 	return --no ip was in the whitelist
 end
--- check_ip_whitelist(ip_whitelist) --run whitelist check function
+check_ip_whitelist(ip_whitelist) --run whitelist check function
 
 local function check_ip_blacklist(ip_table)
 	local ip_table_length = #ip_table
@@ -2399,7 +2396,7 @@ local function check_ip_blacklist(ip_table)
 
 	return --no ip was in blacklist
 end
--- check_ip_blacklist(ip_blacklist) --run blacklist check function
+check_ip_blacklist(ip_blacklist) --run blacklist check function
 
 local function check_user_agent_blacklist(user_agent_table)
 	local user_agent_table_length = #user_agent_table
@@ -2417,7 +2414,6 @@ local function check_user_agent_blacklist(user_agent_table)
 			user_agent_blacklist_var = string.lower(user_agent_blacklist_var)
 		end
 		if string.match(user_agent_blacklist_var, value[1])then
-			ngx.log(ngx.DEBUG, 'AGENT Challenge')
 			local output = ngx.exit(ngx.HTTP_FORBIDDEN) --deny user access
 			return output
 		end
@@ -2425,7 +2421,7 @@ local function check_user_agent_blacklist(user_agent_table)
 
 	return --no user agent was in blacklist
 end
--- check_user_agent_blacklist(user_agent_blacklist_table) --run user agent blacklist check function
+check_user_agent_blacklist(user_agent_blacklist_table) --run user agent blacklist check function
 
 local function check_user_agent_whitelist(user_agent_table)
 	local user_agent_table_length = #user_agent_table
@@ -2488,7 +2484,7 @@ end --a-z lowercase
 charset[charset_table_length] = string.char(95) --insert number 95 underscore
 charset_table_length=charset_table_length+1
 local stringrandom_table = {} --create table to store our generated vars to avoid duplicates
-local stringrandom_table_new_length = 1	
+local stringrandom_table_new_length = 1
 local function stringrandom(length)
 	--math.randomseed(os.time())
 	if length > 0 then
@@ -2722,7 +2718,7 @@ if expire_time > 31536000 then --greater than one year
 end
 
 local expected_header_status = 200
-local authentication_page_status_output = 409
+local authentication_page_status_output = 503
 
 --Put our vars into storage for use later on
 local challenge_original = challenge
@@ -2946,7 +2942,6 @@ end
 Grant access function to either grant or deny user access to our website
 ]]
 local function grant_access()
-	ngx.log(ngx.STDERR, '===============SET Challenge=================')
 	--our uid cookie
 	local cookie_name = "cookie_" .. challenge
 	local cookie_value = ngx.var[cookie_name] or ""
@@ -3291,7 +3286,6 @@ local anti_ddos_html_output = [[
 --All previous checks failed and no access_granted permited so display authentication check page.
 --Output Anti-DDoS Authentication Page
 if set_cookies == nil then
-ngx.log(ngx.STDERR, 'SET Challenge')
 set_cookies = challenge.."="..answer.."; path=/; expires=" .. ngx.cookie_time(currenttime+expire_time) .. "; Max-Age=" .. expire_time .. ";" --apply our uid cookie in header here incase browsers javascript can't set cookies due to permissions.
 end
 ngx.header["Set-Cookie"] = set_cookies
