@@ -2243,6 +2243,7 @@ local function WAF_Post_Requests()
 						arguement2 = 1
 					end
 					if arguement1 and arguement2 then --if what would of been our empty vars have been changed to not empty meaning a WAF match then block the request
+						ngx.log(ngx.STDERR, 'Error POST Challenge')
 						local output = ngx.exit(ngx.HTTP_FORBIDDEN) --deny user access
 						return output
 					end
@@ -2283,6 +2284,7 @@ local function WAF_Header_Requests()
 						arguement2 = 1
 					end
 					if arguement1 and arguement2 then --if what would of been our empty vars have been changed to not empty meaning a WAF match then block the request
+						ngx.log(ngx.STDERR, 'Error WAF Challenge')
 						local output = ngx.exit(ngx.HTTP_FORBIDDEN) --deny user access
 						return output
 					end
@@ -2323,6 +2325,7 @@ local function WAF_query_string_Request()
 						arguement2 = 1
 					end
 					if arguement1 and arguement2 then --if what would of been our empty vars have been changed to not empty meaning a WAF match then block the request
+						ngx.log(ngx.STDERR, 'Error WAF String Challenge')
 						local output = ngx.exit(ngx.HTTP_FORBIDDEN) --deny user access
 						return output
 					end
@@ -2484,7 +2487,7 @@ end --a-z lowercase
 charset[charset_table_length] = string.char(95) --insert number 95 underscore
 charset_table_length=charset_table_length+1
 local stringrandom_table = {} --create table to store our generated vars to avoid duplicates
-local stringrandom_table_new_length = 1
+local stringrandom_table_new_length = 1	
 local function stringrandom(length)
 	--math.randomseed(os.time())
 	if length > 0 then
@@ -2718,7 +2721,7 @@ if expire_time > 31536000 then --greater than one year
 end
 
 local expected_header_status = 200
-local authentication_page_status_output = 403
+local authentication_page_status_output = 409
 
 --Put our vars into storage for use later on
 local challenge_original = challenge
