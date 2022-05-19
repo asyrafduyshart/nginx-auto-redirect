@@ -96,8 +96,8 @@ server {
 }
 
 server {
-    listen 80 ;
-    listen [::]:80 ;
+    listen 80 proxy_protocol;
+    listen [::]:80 proxy_protocol;
 
     #nginx config settings etc
     access_by_lua_file anti_ddos_challenge.lua;
