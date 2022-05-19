@@ -596,10 +596,10 @@ local WAF_query_string_Request_table = {
 		"[a-zA-Z0-9_]", --regex match name
 		"http%:%/%/", --regex or exact match value
 	},
-	{
-		"[a-zA-Z0-9_]", --regex match name
-		"https%:%/%/", --regex or exact match value
-	},
+	-- {
+	-- 	"[a-zA-Z0-9_]", --regex match name
+	-- 	"https%:%/%/", --regex or exact match value
+	-- },
 	--[[
 		SQLi SQL Injections
 	]]
