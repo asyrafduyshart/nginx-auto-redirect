@@ -16,9 +16,13 @@ server {
         ssl_certificate_key /etc/nginx/certs/key.pem;
 
         server_name _;
-        
+
         access_log off;
         error_log off;
+
+        if ($bad_referer) { 
+            return 403; 
+        } 
 
         # reset timed out connections freeing ram
         reset_timedout_connection on;
@@ -113,10 +117,14 @@ server {
 
 
 server {
-    listen 80 proxy_protocol;
-    listen [::]:80 proxy_protocol;
+    listen 80;
+    listen [::]:80;
 
     server_name _;
+
+    if ($bad_referer) { 
+        return 403; 
+    } 
 
     # reset timed out connections freeing ram
     reset_timedout_connection on;
