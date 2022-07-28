@@ -20,6 +20,10 @@ server {
         access_log off;
         error_log off;
 
+        if ($bad_referer) { 
+            return 403; 
+        } 
+
         location /health {
                 access_log off;
                 add_header 'Content-Type' 'application/json';
@@ -108,6 +112,10 @@ server {
     #nginx config settings etc
 
     server_name _;
+
+    if ($bad_referer) { 
+        return 403; 
+    } 
 
     location /health {
         access_log off;

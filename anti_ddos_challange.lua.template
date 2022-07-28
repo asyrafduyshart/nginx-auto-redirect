@@ -273,7 +273,7 @@ This way you don't have to remove access_by_lua_file anti_ddos_challenge.lua; to
 2 = disabled (Won't show anywhere)
 3 = custom (Will enable script on sites / URL paths and disable it on those specified)
 ]]
-local master_switch = 1 --enabled by default
+local master_switch = ${DDOS} --enabled by default
 
 --[[
 This feature is if you set "master_switch = 3" what this does is if you host multiple websites / services of one server / machine you can have this script disabled for all those websites / domain names other than those you specifiy.
@@ -384,6 +384,10 @@ local user_agent_blacklist_table = {
 		"python",
 		1,
 	},
+	{
+		"Go-http-client",
+		1,
+	}
 }
 
 --[[
