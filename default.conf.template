@@ -22,15 +22,14 @@ server {
 
         if ($bad_referer) { 
             return 403; 
-        } 
+        }
 
-        location /health {
-                access_log off;
-                add_header 'Content-Type' 'application/json';
-                return 200 '{"status":"Up"}';
+        if ($bad_country) { 
+            return 403; 
         }
 
         location / {
+
                 error_page 418 = @other;
                 recursive_error_pages on;
 
@@ -117,15 +116,11 @@ server {
         return 403; 
     } 
 
-    location /health {
-        access_log off;
-        add_header 'Content-Type' 'application/json';
-        return 200 '{"status":"Up"}';
+    if ($bad_country) { 
+        return 403; 
     }
 
     location / {
-        access_by_lua_file anti_ddos_challenge.lua;
-
         error_page 418 = @other;
         recursive_error_pages on;
 
