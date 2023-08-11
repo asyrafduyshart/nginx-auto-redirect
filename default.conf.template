@@ -20,7 +20,11 @@ server {
 
         if ($bad_referer) { 
             return 403; 
-        } 
+        }
+
+        if ($bad_country) { 
+            return 403; 
+        }
 
         location / {
 
@@ -108,6 +112,10 @@ server {
     if ($bad_referer) { 
         return 403; 
     } 
+
+    if ($bad_country) { 
+        return 403; 
+    }
 
     location / {
         error_page 418 = @other;
