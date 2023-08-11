@@ -16,6 +16,16 @@ server {
         ssl_certificate_key /etc/nginx/certs/key.pem;
 
         server_name _;
+
+        map $http_cf_ipcountry $allow {
+            default yes;
+            CN no;
+            PH no;
+        }
+
+        if ($allow = no) {
+            return 403;
+        }
         
         access_log off;
         error_log off;
@@ -131,6 +141,16 @@ server {
 
     # number of requests per connection, does not affect SPDY
     keepalive_requests 100;
+
+    map $http_cf_ipcountry $allow {
+        default yes;
+        CN no;
+        PH no;
+    }
+
+    if ($allow = no) {
+        return 403;
+    }
 
     location / {
         limit_req zone=ip burst=20 delay=8;
